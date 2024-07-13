@@ -65,11 +65,9 @@ Configure settings for forwarding data over TCP to remote Splunk instances or ot
 ### Download Splunk Enterprise:
 * Go to the Splunk Enterprise download page.
 * Choose the appropriate version for Windows and download the installer.
-
 ### Install Splunk Enterprise:
 * Run the downloaded installer and follow the installation wizard.
 * Ensure to note down the admin password set during installation.
-
 ### Quick installation of splunk enterprise:
     wget -O splunk-9.0.3-dd0128b1f8cd-linux-2.6-amd64.deb "https://download.splunk.com/products/splunk/releases/9.0.3/linux/splunk-9.0.3-dd0128b1f8cd-linux-2.6-amd64.deb"
     mv splunk-9.0.3-dd0128b1f8cd-linux-2.6-amd64.deb /tmp
@@ -82,6 +80,7 @@ Configure settings for forwarding data over TCP to remote Splunk instances or ot
 * Open a web browser and go to http://localhost:8000 or http://<your_windows_ip>:8000.
 * Log in with the admin credentials.
 
+
 ## 2. Configure Splunk Enterprise (Admin Side):
 ### Add Data Input:
 * Navigate to Settings > Data inputs > Add data on Splunk Web.
@@ -93,7 +92,7 @@ Configure settings for forwarding data over TCP to remote Splunk instances or ot
 * Use the Search & Reporting app to run searches and create visualizations.
 * Example search query in Splunk’s Search Processing Language (SPL):
 
-        index=* sourcetype=syslog | stats count by sourcetype
+      index=* sourcetype=syslog | stats count by sourcetype
 * This query counts logs by syslog sourcetype across all indexes.
   
 ### Create Dashboards and Alerts:
@@ -106,6 +105,38 @@ Configure settings for forwarding data over TCP to remote Splunk instances or ot
 * Ensure ports (8000 for Splunk Web, 9997 for forwarder data) are open between Kali Linux and Windows.
 ### Authentication and Access Controls:
 * Manage user roles and permissions within Splunk for secure access and data protection.
+
+  
 ## Summary:
 Configuring Splunk involves setting up the Universal Forwarder on Kali Linux to forward logs and installing Splunk Enterprise on Windows for indexing and analysis. Ensure proper configuration of inputs, perform searches, create visualizations, and secure access to Splunk for effective log analysis.
 If you encounter specific issues during setup or need further guidance on Splunk configuration, feel free to ask!
+
+
+## Additional:
+To solve Error like minimum space limit 5000 follow the given below procedure:
+
+### Navigate to the default dir:
+    cd /opt/splunk/etc/system/default/
+    Ls
+### Open the file server.conf :
+    vi server.conf 
+### copy following from text:
+    [diskUsage]
+    minFreeSpace = 5000
+    pollingFrequency = 100000
+    pollingTimerFrequency = 10
+    
+### Navigate to the local dir:
+    cd  /opt/splunk/etc/apps/search/local/
+### Open the file server.conf :
+    vi server.conf
+### paste the copied text :
+    [diskUsage]
+    minfreespace = 50 
+    pollingFrequency = 100000
+    pollingTimerFrequency = 10
+ 
+### Now restart the splunk again:
+    /opt/splunk/bin/ ./splunk restart
+
+
